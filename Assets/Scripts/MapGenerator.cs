@@ -21,11 +21,7 @@ public class MapGenerator : MonoBehaviour {
     private GameObject mapObject;
 
     void Start(){
-        mapObject = new GameObject("Map");
-        GenerateShapeMap();
-        GenerateMapItemsMap();
-
-        PresentMap();
+        NewMap();
     }
 
     void Update(){
@@ -33,11 +29,17 @@ public class MapGenerator : MonoBehaviour {
             if(shapeMap!= null){
                 Destroy(GameObject.Find("Map"));
             }
-            GenerateShapeMap();
-            GenerateMapItemsMap();
-
-            PresentMap();
+            NewMap();
         }
+    }
+
+    void NewMap(){
+        mapObject = new GameObject("Map");
+
+        GenerateShapeMap();
+        GenerateMapItemsMap();
+
+        PresentMap();
     }
 
     void GenerateShapeMap(){
