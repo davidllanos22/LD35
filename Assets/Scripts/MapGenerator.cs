@@ -5,15 +5,17 @@ using System;
 public class MapGenerator : MonoBehaviour {
 
     public int width, height;
-	
     [Range(0,100)]
     public int randomFillPercent;
-
     public string seed;
     public bool useRandomSeed;
-   
-    int [,] map;
     public int borderWidth = 5;
+    public GameObject tile;
+
+    //===========================
+
+    private int [,] map;
+    private GameObject mapObject;
 
     void Start(){
         GenerateMap();
@@ -21,17 +23,23 @@ public class MapGenerator : MonoBehaviour {
 
     void Update(){
         if(Input.GetMouseButtonDown(0)){
+            if(map!= null){
+                Destroy(GameObject.Find("Map"));
+            }
             GenerateMap();
         }
     }
 
     void GenerateMap(){
         map = new int[width, height];
+        mapObject = new GameObject("Map");
         RandomFillMap();
 
         for(int i = 0; i< 5; i++){
             SmoothMap();
         }
+
+        PresentMap();
     }
 
     void RandomFillMap(){
@@ -81,12 +89,26 @@ public class MapGenerator : MonoBehaviour {
     }
 
     void OnDrawGizmos(){
-        if(map != null){
+        /*if(map != null){
             for(int x = 0; x < width; x++){
                 for(int y = 0; y < height; y++){
                     Gizmos.color = map[x, y] == 1 ? Color.blue: Color.yellow;
                     Vector3 pos = new Vector3(-width/2 + x + .5f, -height/2 + y + .5f, 0);
                     Gizmos.DrawCube(pos, Vector3.one);
+                }   
+            }
+        }*/
+    }
+
+    void PresentMap(){
+        if(map != null){
+            for(int x = 0; x < width; x++){
+                for(int y = 0; y < height; y++){
+                    Color color = map[x, y] == 1 ? Color.blue: Color.yellow;
+                    Vector3 pos = new Vector3(-width/2 + x + .5f, -height/2 + y + .5f, 0);
+                    GameObject instance = Instantiate(tile, pos, transform.rotation) as GameObject;
+                    instance.transform.SetParent(mapObject.transform);
+                    instance.GetComponent<SpriteRenderer>().color = color;
                 }   
             }
         }
