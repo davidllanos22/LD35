@@ -28,7 +28,6 @@ public class MapItem : MonoBehaviour {
                 break;
             case TYPE.ROCK:
                 renderer.sprite = rock;
-                renderer.color = Color.grey;
                 break;
         }
     }
