@@ -16,9 +16,10 @@ public class Player : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         if(Input.GetMouseButtonDown(0)){
-            GetTileClicked();
+            GameObject tileClicked = GetTileClicked();
+            tileClicked.GetComponent<SpriteRenderer>().color = Color.red;
         }
         if(Input.GetKeyDown(KeyCode.W)) SetPosition(0, -1);
         if(Input.GetKeyDown(KeyCode.A)) SetPosition(-1, 0);
@@ -35,12 +36,6 @@ public class Player : MonoBehaviour {
 
     private GameObject GetTileClicked(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        if(hit.collider != null){
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            float x = Mathf.Floor(pos.x);
-            float y = Mathf.Floor(pos.y);
-            //Debug.Log(pos);
-        }
-        return null;
+        return hit.collider != null ? hit.collider.gameObject : null;
     }
 }
