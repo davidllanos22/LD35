@@ -4,7 +4,6 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
     private Vector3 currentTile;
-    private Vector3 targetTile;
     private SpriteRenderer renderer;
 
     private bool moving = false;
@@ -12,12 +11,13 @@ public class Player : MonoBehaviour {
     private float lerpTime = 1f;
     private float currentLerpTime = 0;
 
+    private Vector3 cube;
+
 	// Use this for initialization
 	void Start () {
-        currentTile = new Vector3(-5, 0, -1);
-        targetTile = currentTile;
+        currentTile = new Vector3(-7, 0, -1);
         renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        transform.position = targetTile;
+        transform.position = currentTile;
 	}
 	
 	// Update is called once per frame
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour {
 
         float perc = currentLerpTime / lerpTime;
 
-        transform.position = Vector3.Lerp(transform.position, targetTile, perc);
+        transform.position = Vector3.Lerp(transform.position, currentTile, perc);
 	}
 
     void Update(){
@@ -61,13 +61,43 @@ public class Player : MonoBehaviour {
             }else if(offX < 0){
                 renderer.flipX = false;
             }
-            targetTile += new Vector3(offX, offY, 0);
-            currentLerpTime = 0;
+            //TODO: obtener el tile y el item en la posición paraa comprobar si está libre
+            Vector3 targetTile = transform.position + new Vector3(offX, offY, 0);
+            cube = targetTile;
+            GameObject obj = GetObjectAtPosition(targetTile.x, targetTile.y);
+            if(obj != null){
+                Tile tile = obj.GetComponent<Tile>();
+
+                bool isSolid = true;
+
+                if(tile != null){
+                    Tile.TYPE type = tile.GetType();
+
+                    isSolid = type == Tile.TYPE.WATER;
+                    Debug.Log(type);
+                }
+
+                if(!isSolid){
+                    currentTile += new Vector3(offX, offY, 0);
+                    currentLerpTime = 0;
+                }
+
+                //Debug.Log(isSolid);
+            }
         }
+    }
+
+    void OnDrawGizmos(){
+        Gizmos.DrawCube(cube,Vector3.one);
     }
 
     private GameObject GetObjectClicked(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+        return hit.collider != null ? hit.collider.gameObject : null;
+    }
+
+    private GameObject GetObjectAtPosition(float x, float y){
+        RaycastHit2D hit = Physics2D.Raycast(new Vector2(x, y), Vector2.zero);
         return hit.collider != null ? hit.collider.gameObject : null;
     }
 }

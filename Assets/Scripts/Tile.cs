@@ -18,6 +18,7 @@ public class Tile : MonoBehaviour {
     private SpriteRenderer renderer;
 
     public void Init(TYPE type){
+        this.type = type;
         renderer = GetComponent<SpriteRenderer>(); 
 
         switch(type){
@@ -35,6 +36,10 @@ public class Tile : MonoBehaviour {
                 renderer.color = color;
                 break;
         }
+    }
+
+    public TYPE GetType(){
+        return type;
     }
 	
 	// Update is called once per frame

@@ -16,7 +16,6 @@ public class MapItem : MonoBehaviour {
     public Sprite water;
     public Sprite solid;
 
-
     private int maxHp;
     private int currentHp;
 
@@ -25,6 +24,7 @@ public class MapItem : MonoBehaviour {
     private SpriteRenderer renderer;
 
     public void Init(TYPE type){
+        this.type = type;
         renderer = GetComponent<SpriteRenderer>(); 
 
         switch(type){
@@ -47,6 +47,10 @@ public class MapItem : MonoBehaviour {
         }
 
         currentHp = maxHp;
+    }
+
+    public TYPE GetType(){
+        return type;
     }
 
     public void Hurt(){
