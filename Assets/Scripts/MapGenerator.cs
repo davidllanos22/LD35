@@ -54,7 +54,6 @@ public class MapGenerator : MonoBehaviour {
     void GenerateMapItemsMap(){
         mapItemsMap = new int[width, height];
         RandomFillmapItemsMap();
-        
     }
 
     void RandomFillShapeMap(){
@@ -83,7 +82,7 @@ public class MapGenerator : MonoBehaviour {
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 if(shapeMap[x, y] == 0){
-                    shapeMap[x, y] = random.Next(4, 6);
+                    shapeMap[x, y] = random.Next(4, 7);
                 }
             }   
         }
@@ -176,14 +175,18 @@ public class MapGenerator : MonoBehaviour {
                         MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
                         tileInstance.Init(Tile.TYPE.SAND);
                         mapItemInstance.Init(MapItem.TYPE.TREE);
-                        //TODO: tree
                     }
 
                     if(value == 5){
                         MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
                         tileInstance.Init(Tile.TYPE.SAND);
                         mapItemInstance.Init(MapItem.TYPE.ROCK);
-                        //TODO: rock
+                    }
+
+                    if(value == 6){
+                        MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
+                        tileInstance.Init(Tile.TYPE.SAND);
+                        mapItemInstance.Init(MapItem.TYPE.WATER);
                     }
                 }   
             }

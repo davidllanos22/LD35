@@ -35,18 +35,17 @@ public class Player : MonoBehaviour {
 
     void Update(){
         if(Input.GetMouseButtonDown(0)){
-            GameObject tileClicked = GetTileClicked();
-            tileClicked.GetComponent<SpriteRenderer>().color = Color.red;
+            GameObject tileClicked = GetObjectClicked();
+            MapItem mapItem = tileClicked.GetComponent<MapItem>();
+            if(mapItem!=null){
+                tileClicked.GetComponent<SpriteRenderer>().color = Color.red;
+                mapItem.Hurt();
+            }
         }
 
         float axisX = Input.GetAxisRaw("Horizontal");
         float axisY = Input.GetAxisRaw("Vertical");
         Move((int)Mathf.Floor(axisX), (int)Mathf.Floor(axisY));
-
-        /*if(axisY < 0) Move(0, -1);
-        if(Input.GetKeyDown(KeyCode.A)) Move(-1, 0);
-        if(Input.GetKeyDown(KeyCode.S)) Move(0, 1);
-        if(Input.GetKeyDown(KeyCode.D)) Move(1, 0);*/
     }
 
     private void SetPosition(int x, int y){
@@ -67,7 +66,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private GameObject GetTileClicked(){
+    private GameObject GetObjectClicked(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         return hit.collider != null ? hit.collider.gameObject : null;
     }
