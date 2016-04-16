@@ -6,9 +6,7 @@ public class Tile : MonoBehaviour {
     public enum TYPE {
         WATER,
         SAND,
-        TREE,
-        ROCK,
-        SOLID
+        GRASS
     }
 
     [Header("Tile Types")]
@@ -27,7 +25,14 @@ public class Tile : MonoBehaviour {
                 renderer.sprite = water;
                 break;
             case TYPE.SAND:
+                //Color color = new Color(1,1,1, Random.Range(0,10) * 0.1f);
                 renderer.sprite = sand;
+                //renderer.color = color;
+                break;
+            case TYPE.GRASS:
+                Color color = new Color(0,1,0);
+                renderer.sprite = sand;
+                renderer.color = color;
                 break;
         }
     }

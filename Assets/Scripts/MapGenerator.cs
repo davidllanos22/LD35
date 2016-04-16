@@ -11,70 +11,98 @@ public class MapGenerator : MonoBehaviour {
     public bool useRandomSeed;
     public int borderWidth = 10;
     public GameObject tile;
+    public GameObject mapItem;
 
     //===========================
 
-    private int [,] map;
+    private int [,] shapeMap;
+    private int [,] mapItemsMap;
+
     private GameObject mapObject;
 
     void Start(){
-        GenerateMap();
-    }
-
-    void Update(){
-        if(Input.GetMouseButtonDown(1)){
-            if(map!= null){
-                Destroy(GameObject.Find("Map"));
-            }
-            GenerateMap();
-        }
-    }
-
-    void GenerateMap(){
-        map = new int[width, height];
         mapObject = new GameObject("Map");
-        RandomFillMap();
-
-        for(int i = 0; i< 8; i++){
-            SmoothMap();
-        }
-
-        CalCulateStartingPosition();
+        GenerateShapeMap();
+        GenerateMapItemsMap();
 
         PresentMap();
     }
 
-    void RandomFillMap(){
+    void Update(){
+        if(Input.GetMouseButtonDown(1)){
+            if(shapeMap!= null){
+                Destroy(GameObject.Find("Map"));
+            }
+            GenerateShapeMap();
+            GenerateMapItemsMap();
+
+            PresentMap();
+        }
+    }
+
+    void GenerateShapeMap(){
+        shapeMap = new int[width, height];
+        RandomFillShapeMap();
+
+        for(int i = 0; i< 8; i++){
+            SmoothShapeMap();
+        }
+
+        CalCulateStartingPosition();
+    }
+
+    void GenerateMapItemsMap(){
+        mapItemsMap = new int[width, height];
+        RandomFillmapItemsMap();
+        
+    }
+
+    void RandomFillShapeMap(){
         if(useRandomSeed){
-            seed = Time.time.ToString();
+            seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
         }
 
         System.Random random = new System.Random(seed.GetHashCode());
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 if(x <= borderWidth || x >= width - borderWidth || y <= borderWidth || y >= height - borderWidth){
-                    map[x, y] = 1;
+                    shapeMap[x, y] = 1;
                 }else{
-                    map[x, y] = random.Next(0, 100) < randomFillPercent ? 1 : 0;
+                    shapeMap[x, y] = random.Next(0, 100) < randomFillPercent ? 1 : 0;
                 }
             }   
         }
     }
 
-    void SmoothMap(){
+    void RandomFillmapItemsMap(){
+        if(useRandomSeed){
+            seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
+        }
+
+        System.Random random = new System.Random(seed.GetHashCode());
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
-                int numTiles = GetNeighbourTiles(x, y);
-                if(numTiles > 4){
-                    map[x, y] = 1;
-                }else if(numTiles < 4){
-                    map[x, y] = 0;
+                if(shapeMap[x, y] == 0){
+                    shapeMap[x, y] = random.Next(4, 6);
                 }
             }   
         }
     }
 
-    int GetNeighbourTiles(int tX, int tY){
+    void SmoothShapeMap(){
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++){
+                int numTiles = GetNeighbourTiles(shapeMap, x, y);
+                if(numTiles > 4){
+                    shapeMap[x, y] = 1;
+                }else if(numTiles < 4){
+                    shapeMap[x, y] = 0;
+                }
+            }   
+        }
+    }
+
+    int GetNeighbourTiles(int [,] map, int tX, int tY){
         int wallCount = 0;
         for(int nX = tX - 1; nX <= tX + 1; nX++){
             for(int nY = tY -1; nY <= tY + 1; nY++){
@@ -111,28 +139,52 @@ public class MapGenerator : MonoBehaviour {
         } while (!assigned);*/
     }
 
+    Tile CreateTileAtPosition(int x, int y){
+        Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, 0);
+        GameObject instance = Instantiate(tile, pos, transform.rotation) as GameObject;
+        instance.transform.SetParent(mapObject.transform);
+
+        return instance.GetComponent<Tile>();
+    }
+
+    MapItem CreateMapItemAtPosition(int x, int y){
+        Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, -0.5f);
+        GameObject instance = Instantiate(mapItem, pos, transform.rotation) as GameObject;
+        instance.transform.SetParent(mapObject.transform);
+
+        return instance.GetComponent<MapItem>();
+    }
+
     void PresentMap(){
-        if(map != null){
+        if(shapeMap != null){
             for(int x = 0; x < width; x++){
                 for(int y = 0; y < height; y++){
-                    Color color = Color.white;
+                    Tile tileInstance = CreateTileAtPosition(x, y);
 
-                        
-                    Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, 0);
-                    GameObject instance = Instantiate(tile, pos, transform.rotation) as GameObject;
-                    instance.transform.SetParent(mapObject.transform);
+                    int value = shapeMap[x, y]; 
+                    if(value == 0) tileInstance.Init(Tile.TYPE.SAND);
+                    if(value == 1) tileInstance.Init(Tile.TYPE.WATER);
+                    if(value == 2){
+                        //TODO: set player start position
+                    }
 
-                    Tile instanceTile = instance.GetComponent<Tile>();
+                    if(value == 3){
+                        //TODO: set player finish position
+                    }
 
+                    if(value == 4){
+                        MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
+                        tileInstance.Init(Tile.TYPE.SAND);
+                        mapItemInstance.Init(MapItem.TYPE.TREE);
+                        //TODO: tree
+                    }
 
-                    /*int value = map[x, y]; if(value == 0) ColorUtility.TryParseHtmlString("#bd9d72", out color);
-                    if(value == 1) ColorUtility.TryParseHtmlString("#29b6f6", out color);
-                    if(value == 2) ColorUtility.TryParseHtmlString("#FF0000", out color);*/
-
-                    int value = map[x, y]; 
-                    if(value == 0) instanceTile.Init(Tile.TYPE.SAND);
-                    if(value == 1) instanceTile.Init(Tile.TYPE.WATER);
-                    if(value == 2) instanceTile.Init(Tile.TYPE.SOLID);
+                    if(value == 5){
+                        MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
+                        tileInstance.Init(Tile.TYPE.SAND);
+                        mapItemInstance.Init(MapItem.TYPE.ROCK);
+                        //TODO: rock
+                    }
                 }   
             }
         }

@@ -38,25 +38,31 @@ public class Player : MonoBehaviour {
             GameObject tileClicked = GetTileClicked();
             tileClicked.GetComponent<SpriteRenderer>().color = Color.red;
         }
-        if(Input.GetKeyDown(KeyCode.W)) Move(0, -1);
+
+        float axisX = Input.GetAxisRaw("Horizontal");
+        float axisY = Input.GetAxisRaw("Vertical");
+        Move((int)Mathf.Floor(axisX), (int)Mathf.Floor(axisY));
+
+        /*if(axisY < 0) Move(0, -1);
         if(Input.GetKeyDown(KeyCode.A)) Move(-1, 0);
         if(Input.GetKeyDown(KeyCode.S)) Move(0, 1);
-        if(Input.GetKeyDown(KeyCode.D)) Move(1, 0);
+        if(Input.GetKeyDown(KeyCode.D)) Move(1, 0);*/
     }
 
     private void SetPosition(int x, int y){
-        transform.position = new Vector3(x, -y, -1);
+        transform.position = new Vector3(x, y, -1);
     }
 
     private void Move(int offX, int offY){
         if(!moving){
             moving = true;
+
             if(offX>0){
                 renderer.flipX = true;
-            }else{
+            }else if(offX < 0){
                 renderer.flipX = false;
             }
-            targetTile += new Vector3(offX, -offY, 0);
+            targetTile += new Vector3(offX, offY, 0);
             currentLerpTime = 0;
         }
     }
