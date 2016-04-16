@@ -26,16 +26,16 @@ public class MapItem : MonoBehaviour {
 
         switch(type){
             case TYPE.TREE:
-                maxHp = 13;
+                maxHp = 6;
                 renderer.sprite = tree;
                 break;
             case TYPE.WATER:
-                maxHp = 20;
-                renderer.sprite = rock;
+                maxHp = 10;
+                renderer.sprite = water;
                 break;
             case TYPE.ROCK:
-                maxHp = 26;
-                renderer.sprite = water;
+                maxHp = 13;
+                renderer.sprite = rock;
                 break;
         }
 
