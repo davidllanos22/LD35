@@ -9,7 +9,7 @@ public class MapGenerator : MonoBehaviour {
     public int randomFillPercent;
     public string seed;
     public bool useRandomSeed;
-    public int borderWidth = 5;
+    public int borderWidth = 10;
     public GameObject tile;
 
     //===========================
@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour {
     }
 
     void Update(){
-        if(Input.GetMouseButtonDown(0)){
+        if(Input.GetMouseButtonDown(1)){
             if(map!= null){
                 Destroy(GameObject.Find("Map"));
             }
@@ -35,9 +35,11 @@ public class MapGenerator : MonoBehaviour {
         mapObject = new GameObject("Map");
         RandomFillMap();
 
-        for(int i = 0; i< 5; i++){
+        for(int i = 0; i< 8; i++){
             SmoothMap();
         }
+
+        CalCulateStartingPosition();
 
         PresentMap();
     }
@@ -88,24 +90,38 @@ public class MapGenerator : MonoBehaviour {
         return wallCount;
     }
 
-    void OnDrawGizmos(){
-        /*if(map != null){
-            for(int x = 0; x < width; x++){
-                for(int y = 0; y < height; y++){
-                    Gizmos.color = map[x, y] == 1 ? Color.blue: Color.yellow;
-                    Vector3 pos = new Vector3(-width/2 + x + .5f, -height/2 + y + .5f, 0);
-                    Gizmos.DrawCube(pos, Vector3.one);
-                }   
+    void CalCulateStartingPosition(){
+        float startPercent = 0.3f;
+        bool assigned = false;
+        System.Random random = new System.Random();
+        int startX = (int)(width * startPercent);
+        int startY = (int)(height * startPercent);
+        int x = random.Next(0, startX);
+        int y = random.Next(0, startY);
+        Debug.Log("X: " + x);
+        Debug.Log("Y: " + y);
+        /*do {
+            int x = random.Next(0, (int)(width * startPercent));
+            int y = random.Next(0, (int)(height * startPercent));
+
+            if(map[x, y] == 0){
+                assigned = true;
+                map[x, y] = 2;
             }
-        }*/
+        } while (!assigned);*/
     }
 
     void PresentMap(){
         if(map != null){
             for(int x = 0; x < width; x++){
                 for(int y = 0; y < height; y++){
-                    Color color = map[x, y] == 1 ? Color.blue: Color.yellow;
-                    Vector3 pos = new Vector3(-width/2 + x + .5f, -height/2 + y + .5f, 0);
+                    Color color = Color.white;
+                    int value = map[x, y];
+                    if(value == 0) color = Color.yellow;
+                    if(value == 1) color = Color.blue;
+                    if(value == 2) color = Color.red;
+                        
+                    Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, 0);
                     GameObject instance = Instantiate(tile, pos, transform.rotation) as GameObject;
                     instance.transform.SetParent(mapObject.transform);
                     instance.GetComponent<SpriteRenderer>().color = color;
