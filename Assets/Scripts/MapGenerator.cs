@@ -2,16 +2,9 @@
 using System.Collections;
 using System;
 
-public class MapGenerator : MonoBehaviour {
+public class MapGenerator {
 
-    public int width, height;
-    [Range(0,100)]
-    public int randomFillPercent;
-    public string seed;
-    public bool useRandomSeed;
-    public int borderWidth = 10;
-    public GameObject tile;
-    public GameObject mapItem;
+
 
     //===========================
 
@@ -20,20 +13,12 @@ public class MapGenerator : MonoBehaviour {
 
     private GameObject mapObject;
 
-    void Start(){
-        NewMap();
-    }
+    private GameObject game;
+    private Game gameInstance;
 
-    void Update(){
-        if(Input.GetMouseButtonDown(1)){
-            if(shapeMap!= null){
-                Destroy(GameObject.Find("Map"));
-            }
-            NewMap();
-        }
-    }
-
-    void NewMap(){
+    public void NewMap(GameObject game){
+        this.game = game;
+        gameInstance = game.GetComponent<Game>();
         mapObject = new GameObject("Map");
 
         GenerateShapeMap();
@@ -43,7 +28,7 @@ public class MapGenerator : MonoBehaviour {
     }
 
     void GenerateShapeMap(){
-        shapeMap = new int[width, height];
+        shapeMap = new int[gameInstance.width, gameInstance.height];
         RandomFillShapeMap();
 
         for(int i = 0; i< 8; i++){
@@ -54,35 +39,35 @@ public class MapGenerator : MonoBehaviour {
     }
 
     void GenerateMapItemsMap(){
-        mapItemsMap = new int[width, height];
+        mapItemsMap = new int[gameInstance.width, gameInstance.height];
         RandomFillmapItemsMap();
     }
 
     void RandomFillShapeMap(){
-        if(useRandomSeed){
-            seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
+        if(gameInstance.useRandomSeed){
+            gameInstance.seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
         }
 
-        System.Random random = new System.Random(seed.GetHashCode());
-        for(int x = 0; x < width; x++){
-            for(int y = 0; y < height; y++){
-                if(x <= borderWidth || x >= width - borderWidth || y <= borderWidth || y >= height - borderWidth){
+        System.Random random = new System.Random(gameInstance.seed.GetHashCode());
+        for(int x = 0; x < gameInstance.width; x++){
+            for(int y = 0; y < gameInstance.height; y++){
+                if(x <= gameInstance.borderWidth || x >= gameInstance.width - gameInstance.borderWidth || y <= gameInstance.borderWidth || y >= gameInstance.height - gameInstance.borderWidth){
                     shapeMap[x, y] = 1;
                 }else{
-                    shapeMap[x, y] = random.Next(0, 100) < randomFillPercent ? 1 : 0;
+                    shapeMap[x, y] = random.Next(0, 100) < gameInstance.randomFillPercent ? 1 : 0;
                 }
             }   
         }
     }
 
     void RandomFillmapItemsMap(){
-        if(useRandomSeed){
-            seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
+        if(gameInstance.useRandomSeed){
+            gameInstance.seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
         }
 
-        System.Random random = new System.Random(seed.GetHashCode());
-        for(int x = 0; x < width; x++){
-            for(int y = 0; y < height; y++){
+        System.Random random = new System.Random(gameInstance.seed.GetHashCode());
+        for(int x = 0; x < gameInstance.width; x++){
+            for(int y = 0; y < gameInstance.height; y++){
                 if(shapeMap[x, y] == 0 && !isWaterNeighbour(x, y)){
                     shapeMap[x, y] = random.Next(4, 8);
                 }
@@ -93,7 +78,7 @@ public class MapGenerator : MonoBehaviour {
     bool isWaterNeighbour(int tX, int tY){
         for(int nX = tX - 1; nX <= tX + 1; nX++){
             for(int nY = tY -1; nY <= tY + 1; nY++){
-                if(nX >= 0 && nX < width && nY >= 0 && nY < height){
+                if(nX >= 0 && nX < gameInstance.width && nY >= 0 && nY < gameInstance.height){
                     if(nX != tX || nY != tY){
                         if(shapeMap[nX, nY] == 1)return true;
                     }
@@ -104,8 +89,8 @@ public class MapGenerator : MonoBehaviour {
     }
 
     void SmoothShapeMap(){
-        for(int x = 0; x < width; x++){
-            for(int y = 0; y < height; y++){
+        for(int x = 0; x < gameInstance.width; x++){
+            for(int y = 0; y < gameInstance.height; y++){
                 int numTiles = GetNeighbourTiles(shapeMap, x, y);
                 if(numTiles > 4){
                     shapeMap[x, y] = 1;
@@ -120,7 +105,7 @@ public class MapGenerator : MonoBehaviour {
         int wallCount = 0;
         for(int nX = tX - 1; nX <= tX + 1; nX++){
             for(int nY = tY -1; nY <= tY + 1; nY++){
-                if(nX >= 0 && nX < width && nY >= 0 && nY < height){
+                if(nX >= 0 && nX < gameInstance.width && nY >= 0 && nY < gameInstance.height){
                     if(nX != tX || nY != tY){
                         wallCount += map[nX, nY];
                     }
@@ -136,8 +121,8 @@ public class MapGenerator : MonoBehaviour {
         float startPercent = 0.3f;
         bool assigned = false;
         System.Random random = new System.Random();
-        int startX = (int)(width * startPercent);
-        int startY = (int)(height * startPercent);
+        int startX = (int)(gameInstance.width * startPercent);
+        int startY = (int)(gameInstance.height * startPercent);
         int x = random.Next(0, startX);
         int y = random.Next(0, startY);
         Debug.Log("X: " + x);
@@ -154,16 +139,16 @@ public class MapGenerator : MonoBehaviour {
     }
 
     Tile CreateTileAtPosition(int x, int y){
-        Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, 0);
-        GameObject instance = Instantiate(tile, pos, transform.rotation) as GameObject;
+        Vector3 pos = new Vector3(-gameInstance.width/2 + x, -gameInstance.height/2 + y, 0);
+        GameObject instance = Game.Instantiate(gameInstance.tile, pos, game.transform.rotation) as GameObject;
         instance.transform.SetParent(mapObject.transform);
 
         return instance.GetComponent<Tile>();
     }
 
     MapItem CreateMapItemAtPosition(int x, int y){
-        Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, -0.5f);
-        GameObject instance = Instantiate(mapItem, pos, transform.rotation) as GameObject;
+        Vector3 pos = new Vector3(-gameInstance.width/2 + x, -gameInstance.height/2 + y, -0.5f);
+        GameObject instance = GameObject.Instantiate(gameInstance.mapItem, pos, game.transform.rotation) as GameObject;
         instance.transform.SetParent(mapObject.transform);
 
         return instance.GetComponent<MapItem>();
@@ -171,8 +156,8 @@ public class MapGenerator : MonoBehaviour {
 
     void PresentMap(){
         if(shapeMap != null){
-            for(int x = 0; x < width; x++){
-                for(int y = 0; y < height; y++){
+            for(int x = 0; x < gameInstance.width; x++){
+                for(int y = 0; y < gameInstance.height; y++){
                     Tile tileInstance = CreateTileAtPosition(x, y);
 
                     int value = shapeMap[x, y]; 
