@@ -7,12 +7,15 @@ public class MapItem : MonoBehaviour {
         TREE,
         WATER,
         ROCK,
+        SOLID
     }
 
     [Header("Tile Types")]
     public Sprite tree;
     public Sprite rock;
     public Sprite water;
+    public Sprite solid;
+
 
     private int maxHp;
     private int currentHp;
@@ -36,6 +39,10 @@ public class MapItem : MonoBehaviour {
             case TYPE.ROCK:
                 maxHp = 13;
                 renderer.sprite = rock;
+                break;
+            case TYPE.SOLID:
+                maxHp = 999999;
+                renderer.sprite = solid;
                 break;
         }
 

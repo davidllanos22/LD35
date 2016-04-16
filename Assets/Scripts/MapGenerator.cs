@@ -84,7 +84,7 @@ public class MapGenerator : MonoBehaviour {
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 if(shapeMap[x, y] == 0 && !isWaterNeighbour(x, y)){
-                    shapeMap[x, y] = random.Next(4, 7);
+                    shapeMap[x, y] = random.Next(4, 8);
                 }
             }   
         }
@@ -202,6 +202,12 @@ public class MapGenerator : MonoBehaviour {
                         MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
                         tileInstance.Init(Tile.TYPE.SAND);
                         mapItemInstance.Init(MapItem.TYPE.WATER);
+                    }
+
+                    if(value == 7){
+                        MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
+                        tileInstance.Init(Tile.TYPE.SAND);
+                        mapItemInstance.Init(MapItem.TYPE.SOLID);
                     }
                 }   
             }

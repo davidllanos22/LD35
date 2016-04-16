@@ -6,7 +6,7 @@ public class Tile : MonoBehaviour {
     public enum TYPE {
         WATER,
         SAND,
-        GRASS
+        GRASS,
     }
 
     [Header("Tile Types")]

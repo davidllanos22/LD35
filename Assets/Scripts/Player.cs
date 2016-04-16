@@ -38,7 +38,7 @@ public class Player : MonoBehaviour {
             GameObject tileClicked = GetObjectClicked();
             MapItem mapItem = tileClicked.GetComponent<MapItem>();
             if(mapItem!=null){
-                tileClicked.GetComponent<SpriteRenderer>().color = Color.red;
+                tileClicked.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.5f, 0.5f);
                 mapItem.Hurt();
             }
         }

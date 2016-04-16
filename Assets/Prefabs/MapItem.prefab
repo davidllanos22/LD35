@@ -58,6 +58,7 @@ MonoBehaviour:
   tree: {fileID: 21300000, guid: 8692f17d17d66491788d6f49b810b839, type: 3}
   rock: {fileID: 21300000, guid: 20dac3aa16a9c42388facabc74414be3, type: 3}
   water: {fileID: 21300000, guid: 784025d8ba19b424a96457f263bbf5ac, type: 3}
+  solid: {fileID: 21300000, guid: e1e5a5fb5a56449e48a07374be34d368, type: 3}
 --- !u!212 &21264520
 SpriteRenderer:
   m_ObjectHideFlags: 1
