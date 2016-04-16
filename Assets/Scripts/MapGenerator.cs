@@ -4,10 +4,6 @@ using System;
 
 public class MapGenerator {
 
-
-
-    //===========================
-
     private int [,] shapeMap;
     private int [,] mapItemsMap;
 
@@ -69,7 +65,20 @@ public class MapGenerator {
         for(int x = 0; x < gameInstance.width; x++){
             for(int y = 0; y < gameInstance.height; y++){
                 if(shapeMap[x, y] == 0 && !isWaterNeighbour(x, y)){
-                    shapeMap[x, y] = random.Next(4, 8);
+                    int r = random.Next(0,100);
+                    int solid = 10;
+                    int tree = 40;
+                    int water = 30;
+                    int rock = 20;
+
+                    Debug.Log(r);
+
+                    if(r < solid) shapeMap[x, y] = 7;
+                    else if(r > solid && r < solid + tree) shapeMap[x, y] = 4; 
+                    else if(r > solid + tree && r < solid + tree + water) shapeMap[x, y] = 6; 
+                    else if(r > solid + tree + water && r < solid + tree + water + rock) shapeMap[x, y] = 5; 
+
+                    //shapeMap[x, y] = random.Next(4, 8);
                 }
             }   
         }

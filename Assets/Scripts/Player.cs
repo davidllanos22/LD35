@@ -63,7 +63,6 @@ public class Player : MonoBehaviour {
             }
             //TODO: obtener el tile y el item en la posición paraa comprobar si está libre
             Vector3 targetTile = transform.position + new Vector3(offX, offY, 0);
-            cube = targetTile;
             GameObject obj = GetObjectAtPosition(targetTile.x, targetTile.y);
             if(obj != null){
                 Tile tile = obj.GetComponent<Tile>();
@@ -74,21 +73,14 @@ public class Player : MonoBehaviour {
                     Tile.TYPE type = tile.GetType();
 
                     isSolid = type == Tile.TYPE.WATER;
-                    Debug.Log(type);
                 }
 
                 if(!isSolid){
                     currentTile += new Vector3(offX, offY, 0);
                     currentLerpTime = 0;
                 }
-
-                //Debug.Log(isSolid);
             }
         }
-    }
-
-    void OnDrawGizmos(){
-        Gizmos.DrawCube(cube,Vector3.one);
     }
 
     private GameObject GetObjectClicked(){
