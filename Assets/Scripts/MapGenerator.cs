@@ -117,9 +117,9 @@ public class MapGenerator : MonoBehaviour {
                 for(int y = 0; y < height; y++){
                     Color color = Color.white;
                     int value = map[x, y];
-                    if(value == 0) color = Color.yellow;
-                    if(value == 1) color = Color.blue;
-                    if(value == 2) color = Color.red;
+                    if(value == 0) ColorUtility.TryParseHtmlString("#bd9d72", out color);
+                    if(value == 1) ColorUtility.TryParseHtmlString("#29b6f6", out color);
+                    if(value == 2) ColorUtility.TryParseHtmlString("#FF0000", out color);
                         
                     Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, 0);
                     GameObject instance = Instantiate(tile, pos, transform.rotation) as GameObject;

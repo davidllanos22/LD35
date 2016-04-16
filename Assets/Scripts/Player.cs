@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.W)) SetPosition(0, -1);
         if(Input.GetKeyDown(KeyCode.A)) SetPosition(-1, 0);
         if(Input.GetKeyDown(KeyCode.S)) SetPosition(0, 1);
-        if(Input.GetKeyDown(KeyCode.D)) SetPosition(1, 0);d
+        if(Input.GetKeyDown(KeyCode.D)) SetPosition(1, 0);
 
 
         transform.position = Vector3.Lerp(transform.position, targetTile, Time.deltaTime * 10f);
@@ -31,8 +31,6 @@ public class Player : MonoBehaviour {
 
     private void SetPosition(int offX, int offY){
         targetTile += new Vector3(offX, -offY, 0); 
-        Debug.Log("Magnitude: " + currentTile.magnitude);
-        Debug.Log("Magnitude2: " + targetTile.magnitude);
     }
 
     private GameObject GetTileClicked(){
