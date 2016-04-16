@@ -4,22 +4,32 @@ using System.Collections;
 public class Tile : MonoBehaviour {
 
     public enum TYPE {
-        TILE_WATER,
-        TILE_SAND,
-        TILE_TREE,
-        TILE_ROCK,
-        TILE_SOLID
+        WATER,
+        SAND,
+        TREE,
+        ROCK,
+        SOLID
     }
 
-    public TYPE type = TYPE.TILE_WATER;
+    [Header("Tile Types")]
+    public Sprite water;
+    public Sprite sand;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+    private TYPE type;
 
-    void Init(){
-            
+    private SpriteRenderer renderer;
+
+    public void Init(TYPE type){
+        renderer = GetComponent<SpriteRenderer>(); 
+
+        switch(type){
+            case TYPE.WATER:
+                renderer.sprite = water;
+                break;
+            case TYPE.SAND:
+                renderer.sprite = sand;
+                break;
+        }
     }
 	
 	// Update is called once per frame

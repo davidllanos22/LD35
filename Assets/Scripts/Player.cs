@@ -7,6 +7,8 @@ public class Player : MonoBehaviour {
     private Vector3 targetTile;
     private SpriteRenderer renderer;
 
+    private bool moving = false;
+
     private float lerpTime = 1f;
     private float currentLerpTime = 0;
 
@@ -14,17 +16,16 @@ public class Player : MonoBehaviour {
 	void Start () {
         currentTile = new Vector3(-5, 0, -1);
         targetTile = currentTile;
-        renderer = transform.GetComponent<SpriteRenderer>();
+        renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         transform.position = targetTile;
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        
-
-        currentLerpTime += 0.01f;
+        currentLerpTime += 0.08f;
         if(currentLerpTime > lerpTime){
             currentLerpTime = lerpTime;
+            if(moving) moving = false;
         }
 
         float perc = currentLerpTime / lerpTime;
@@ -37,15 +38,27 @@ public class Player : MonoBehaviour {
             GameObject tileClicked = GetTileClicked();
             tileClicked.GetComponent<SpriteRenderer>().color = Color.red;
         }
-        if(Input.GetKeyDown(KeyCode.W)) SetPosition(0, -1);
-        if(Input.GetKeyDown(KeyCode.A)) SetPosition(-1, 0);
-        if(Input.GetKeyDown(KeyCode.S)) SetPosition(0, 1);
-        if(Input.GetKeyDown(KeyCode.D)) SetPosition(1, 0);
+        if(Input.GetKeyDown(KeyCode.W)) Move(0, -1);
+        if(Input.GetKeyDown(KeyCode.A)) Move(-1, 0);
+        if(Input.GetKeyDown(KeyCode.S)) Move(0, 1);
+        if(Input.GetKeyDown(KeyCode.D)) Move(1, 0);
     }
 
-    private void SetPosition(int offX, int offY){
-        targetTile += new Vector3(offX, -offY, 0);
-        currentLerpTime = 0;
+    private void SetPosition(int x, int y){
+        transform.position = new Vector3(x, -y, -1);
+    }
+
+    private void Move(int offX, int offY){
+        if(!moving){
+            moving = true;
+            if(offX>0){
+                renderer.flipX = true;
+            }else{
+                renderer.flipX = false;
+            }
+            targetTile += new Vector3(offX, -offY, 0);
+            currentLerpTime = 0;
+        }
     }
 
     private GameObject GetTileClicked(){

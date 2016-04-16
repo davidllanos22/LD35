@@ -116,15 +116,23 @@ public class MapGenerator : MonoBehaviour {
             for(int x = 0; x < width; x++){
                 for(int y = 0; y < height; y++){
                     Color color = Color.white;
-                    int value = map[x, y];
-                    if(value == 0) ColorUtility.TryParseHtmlString("#bd9d72", out color);
-                    if(value == 1) ColorUtility.TryParseHtmlString("#29b6f6", out color);
-                    if(value == 2) ColorUtility.TryParseHtmlString("#FF0000", out color);
+
                         
                     Vector3 pos = new Vector3(-width/2 + x, -height/2 + y, 0);
                     GameObject instance = Instantiate(tile, pos, transform.rotation) as GameObject;
                     instance.transform.SetParent(mapObject.transform);
-                    instance.GetComponent<SpriteRenderer>().color = color;
+
+                    Tile instanceTile = instance.GetComponent<Tile>();
+
+
+                    /*int value = map[x, y]; if(value == 0) ColorUtility.TryParseHtmlString("#bd9d72", out color);
+                    if(value == 1) ColorUtility.TryParseHtmlString("#29b6f6", out color);
+                    if(value == 2) ColorUtility.TryParseHtmlString("#FF0000", out color);*/
+
+                    int value = map[x, y]; 
+                    if(value == 0) instanceTile.Init(Tile.TYPE.SAND);
+                    if(value == 1) instanceTile.Init(Tile.TYPE.WATER);
+                    if(value == 2) instanceTile.Init(Tile.TYPE.SOLID);
                 }   
             }
         }
