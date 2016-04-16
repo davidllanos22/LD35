@@ -81,11 +81,24 @@ public class MapGenerator : MonoBehaviour {
         System.Random random = new System.Random(seed.GetHashCode());
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
-                if(shapeMap[x, y] == 0){
+                if(shapeMap[x, y] == 0 && !isWaterNeighbour(x, y)){
                     shapeMap[x, y] = random.Next(4, 7);
                 }
             }   
         }
+    }
+
+    bool isWaterNeighbour(int tX, int tY){
+        for(int nX = tX - 1; nX <= tX + 1; nX++){
+            for(int nY = tY -1; nY <= tY + 1; nY++){
+                if(nX >= 0 && nX < width && nY >= 0 && nY < height){
+                    if(nX != tX || nY != tY){
+                        if(shapeMap[nX, nY] == 1)return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     void SmoothShapeMap(){
