@@ -7,7 +7,8 @@ public class MapItem : MonoBehaviour {
         TREE,
         WATER,
         ROCK,
-        SOLID
+        SOLID,
+        TREASURE
     }
 
     [Header("Tile Types")]
@@ -15,6 +16,7 @@ public class MapItem : MonoBehaviour {
     public Sprite rock;
     public Sprite water;
     public Sprite solid;
+    public Sprite treasure;
 
     private int maxHp;
     private int currentHp;
@@ -44,6 +46,10 @@ public class MapItem : MonoBehaviour {
                 maxHp = 999999;
                 renderer.sprite = solid;
                 break;
+            case TYPE.TREASURE:
+                maxHp = 999999;
+                renderer.sprite = treasure;
+                break;
         }
 
         currentHp = maxHp;
@@ -54,9 +60,13 @@ public class MapItem : MonoBehaviour {
     }
 
     public void Hurt(){
-        currentHp--;
-        if(currentHp <= 0){
-            Die();
+        if(type == TYPE.TREASURE){
+            Debug.Log("WIN");
+        }else{
+            currentHp--;
+            if(currentHp <= 0){
+                Die();
+            }
         }
     }
 

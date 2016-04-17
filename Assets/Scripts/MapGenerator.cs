@@ -21,7 +21,8 @@ public class MapGenerator {
 
         GenerateShapeMap();
         GenerateMapItemsMap();
-        CalCulateStartingPosition();
+        CalCulateStartPosition();
+        CalCulateFinishPosition();
 
         PresentMap();
     }
@@ -67,20 +68,20 @@ public class MapGenerator {
         for(int x = 0; x < gameInstance.width; x++){
             for(int y = 0; y < gameInstance.height; y++){
                 if(shapeMap[x, y] == 0 && !isWaterNeighbour(x, y)){
-                    /*int r = random.Next(0,100);
+                    int r = random.Next(0,100);
                     int solid = 10;
                     int tree = 40;
-                    int water = 30;
-                    int rock = 20;
+                    int water = 10;
+                    int rock = 40;
 
                     Debug.Log(r);
 
                     if(r < solid) shapeMap[x, y] = 7;
                     else if(r > solid && r < solid + tree) shapeMap[x, y] = 4; 
                     else if(r > solid + tree && r < solid + tree + water) shapeMap[x, y] = 6; 
-                    else if(r > solid + tree + water && r < solid + tree + water + rock) shapeMap[x, y] = 5; */
+                    else if(r > solid + tree + water && r < solid + tree + water + rock) shapeMap[x, y] = 5;
 
-                    shapeMap[x, y] = random.Next(4, 8);
+                    //shapeMap[x, y] = random.Next(4, 8);
                 }
             }   
         }
@@ -128,17 +129,7 @@ public class MapGenerator {
         return wallCount;
     }
 
-    void CalCulateStartingPosition(){
-        float startPercent = 0.3f;
-        bool assigned = false;
-        System.Random random = new System.Random();
-        int startX = (int)(gameInstance.width * startPercent);
-        int startY = (int)(gameInstance.height * startPercent);
-        int x = random.Next(0, startX);
-        int y = random.Next(0, startY);
-        Debug.Log("X: " + x);
-        Debug.Log("Y: " + y);
-
+    void CalCulateStartPosition(){
         for(int xx = 0; xx < gameInstance.width; xx++){
             for(int yy = 0; yy < gameInstance.height; yy++){
                 if(shapeMap[xx, yy] == 0){
@@ -149,15 +140,17 @@ public class MapGenerator {
                 }
             }
         }
-        /*do {
-            int x = random.Next(0, (int)(width * startPercent));
-            int y = random.Next(0, (int)(height * startPercent));
+    }
 
-            if(map[x, y] == 0){
-                assigned = true;
-                map[x, y] = 2;
+    void CalCulateFinishPosition(){
+        for(int xx = gameInstance.width-1; xx > 0; xx--){
+            for(int yy = 0; yy < gameInstance.height; yy++){
+                if(shapeMap[xx, yy] == 0){
+                    shapeMap[xx, yy] = 8;
+                    return;
+                }
             }
-        } while (!assigned);*/
+        }
     }
 
     Tile CreateTileAtPosition(int x, int y){
@@ -215,6 +208,12 @@ public class MapGenerator {
                         MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
                         tileInstance.Init(Tile.TYPE.SAND);
                         mapItemInstance.Init(MapItem.TYPE.SOLID);
+                    }
+
+                    if(value == 8){
+                        MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
+                        tileInstance.Init(Tile.TYPE.SAND);
+                        mapItemInstance.Init(MapItem.TYPE.TREASURE);
                     }
                 }   
             }
