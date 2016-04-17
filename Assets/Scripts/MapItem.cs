@@ -69,6 +69,7 @@ public class MapItem : MonoBehaviour {
 
     public void Hurt(Player.TOOL tool){
         if(type == TYPE.TREASURE){
+            Application.LoadLevel("Victory");
             Debug.Log("WIN");
         }else{
             if(isValidTool(tool)){
@@ -82,11 +83,12 @@ public class MapItem : MonoBehaviour {
     }
 
     public void StartFlying(bool shouldFly){
-        if(true){
+        if(shouldFly){
             lastTransform = transform;
             flying = true;
-            body.AddForceAtPosition(new Vector2(8, 8), transform.position);
-            body.AddTorque(0.5f);
+            renderer.color = new Color(1, 1, 1, 0);
+            //body.AddForceAtPosition(new Vector2(8, 8), transform.position);
+            //body.AddTorque(0.5f);
         }else{
             
         }
@@ -104,14 +106,13 @@ public class MapItem : MonoBehaviour {
     void Update () {
         if(flying){
             if(currentFlyingTime >= flyingMaxTime){
-                Destroy(body);
                 transform.position = lastTransform.position;
-                body = gameObject.AddComponent<Rigidbody2D>();
 
                 flying = false;
                 currentFlyingTime = 0;
             }else{
-                currentFlyingTime += Time.deltaTime;
+                renderer.color += new Color(0, 0, 0, Time.deltaTime * 0.6f);
+                currentFlyingTime += Time.deltaTime * 0.6f;
             }
         }
     }

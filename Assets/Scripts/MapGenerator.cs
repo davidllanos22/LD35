@@ -64,7 +64,6 @@ public class MapGenerator {
                 if(shapeMap[x, y] == 0 && !isLeftBeachBitch(x, y)){
 
 					int rand = random.Next(0, 101);
-					Debug.Log (rand);
 
 					if (x < gameInstance.width / 3) {
 						if (rand <= 15) {
@@ -116,7 +115,7 @@ public class MapGenerator {
     }
 
 	bool isLeftBeachBitch(int tX, int tY){
-		return shapeMap [Math.Max(tX - 1, 0), tY] == 1;
+		return shapeMap [Math.Max(tX - 1, 0), tY] != 0;
 	}
 
 
@@ -163,6 +162,7 @@ public class MapGenerator {
 		int yf = 0;
 		while (x < gameInstance.width && y < gameInstance.height) {
 			if (asc) {
+                Debug.Log(shapeMap [(int)x, (int)y]);
 				if (shapeMap [(int)x, (int)y] == 0) {
 					Vector3 pos = new Vector3 (-gameInstance.width / 2 + (int)x, -gameInstance.height / 2 + (int)y, 0);
 					player = Game.Instantiate (gameInstance.player, pos, game.transform.rotation) as GameObject;
@@ -170,6 +170,7 @@ public class MapGenerator {
 					return;
 				}
 			} else {
+                Debug.Log(shapeMap [(int)x, (int)y]);
 				yf = gameInstance.height - (int)y -1;
 				if (shapeMap [(int)x, yf] == 0) {
 					Vector3 pos = new Vector3 (-gameInstance.width / 2 + (int)x, -gameInstance.height / 2 + yf, 0);
@@ -190,7 +191,7 @@ public class MapGenerator {
 		double x = gameInstance.width-1;
 		double y = gameInstance.height-1;
 		int yf = 0;
-		while (x > 0 && y > 0) {
+        while (x > 0 && y > 0) {
 			if (asc) {
 				if (shapeMap [gameInstance.width - (int)x, gameInstance.height - (int)y] == 0) {
 					shapeMap [(int)x, (int)y] = 8;

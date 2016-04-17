@@ -4,22 +4,24 @@ using System.Collections;
 public class CameraBehavior : MonoBehaviour {
 
     GameObject player;
+    bool followPlayer = true;
 
-	// Use this for initialization
 	void Start () {
         player = GameObject.Find("Player");
 	}
 	
-	// Update is called once per frame
 	void Update () {
         float zoom = Input.GetAxis("Mouse ScrollWheel");
-        Camera.main.orthographicSize = Mathf.Max(0, Camera.main.orthographicSize - zoom);
+        Camera.main.orthographicSize = Mathf.Max(1, Camera.main.orthographicSize - zoom);
 
         if(player == null){
             player = GameObject.Find("Player");
             if(player == null) return;
         }
-        Vector3 playerPosition = player.transform.position;
-        transform.position = new Vector3(playerPosition.x, playerPosition.y, transform.position.z);
+
+        if(followPlayer){
+            Vector3 playerPosition = player.transform.position;
+            transform.position = new Vector3(playerPosition.x, playerPosition.y, transform.position.z);
+        }
 	}
 }
