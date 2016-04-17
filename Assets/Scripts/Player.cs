@@ -13,6 +13,15 @@ public class Player : MonoBehaviour {
 
     private Vector3 cube;
 
+    public enum TOOL {
+        NONE,
+        AXE,
+        PICKAXE,
+        WATER_PUMP
+    }
+
+    private TOOL currentTool = TOOL.NONE;
+
 	// Use this for initialization
 	void Start () {
         currentTile = transform.position;
@@ -38,10 +47,13 @@ public class Player : MonoBehaviour {
             GameObject tileClicked = GetObjectClicked();
             MapItem mapItem = tileClicked.GetComponent<MapItem>();
             if(mapItem!=null){
-                tileClicked.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.5f, 0.5f);
-                mapItem.Hurt();
+                mapItem.Hurt(currentTool);
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.Alpha1)) setCurrentTool(TOOL.AXE);
+        if(Input.GetKeyDown(KeyCode.Alpha2)) setCurrentTool(TOOL.PICKAXE);
+        if(Input.GetKeyDown(KeyCode.Alpha3)) setCurrentTool(TOOL.WATER_PUMP);
 
         float axisX = Input.GetAxisRaw("Horizontal");
         float axisY = Input.GetAxisRaw("Vertical");
@@ -81,6 +93,15 @@ public class Player : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public TOOL getCurrentTool(){
+        return currentTool;
+    }
+
+    public void setCurrentTool(TOOL tool){
+        Debug.Log("CURRENT TOOL: " + tool);
+        this.currentTool = tool;
     }
 
     private GameObject GetObjectClicked(){

@@ -57,7 +57,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   water: {fileID: 21300000, guid: 784025d8ba19b424a96457f263bbf5ac, type: 3}
   sand: {fileID: 21300000, guid: 0123fd29159d149e995ca96d5c7cdf05, type: 3}
-  solid: {fileID: 21300000, guid: e1e5a5fb5a56449e48a07374be34d368, type: 3}
 --- !u!212 &21244662
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -84,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: cb6c6ad2fc27048ddbb7d306d89a322d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0123fd29159d149e995ca96d5c7cdf05, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
