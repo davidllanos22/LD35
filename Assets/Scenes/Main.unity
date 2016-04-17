@@ -85,48 +85,6 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &1151122678
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 416300, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1214580431
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,14 +210,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2f397733ab0463d94b0408be0804f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 25
-  height: 15
+  width: 35
+  height: 25
   randomFillPercent: 20
   seed: 
   useRandomSeed: 1
   borderWidth: 2
   tile: {fileID: 148274, guid: 0c0f7c62e31a746ef813331f0e387f74, type: 2}
   mapItem: {fileID: 109070, guid: ee40ee4f0ead141c4adf2a1603288630, type: 2}
+  player: {fileID: 199488, guid: 02e2a120829ff4589b1fe0a3dcbdcadd, type: 2}
 --- !u!4 &1554064965
 Transform:
   m_ObjectHideFlags: 0

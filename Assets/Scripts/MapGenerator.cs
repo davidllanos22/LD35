@@ -11,14 +11,17 @@ public class MapGenerator {
 
     private GameObject game;
     private Game gameInstance;
+    private GameObject player;
 
     public void NewMap(GameObject game){
         this.game = game;
         gameInstance = game.GetComponent<Game>();
         mapObject = new GameObject("Map");
+        if(player != null) GameObject.Destroy(player);
 
         GenerateShapeMap();
         GenerateMapItemsMap();
+        CalCulateStartingPosition();
 
         PresentMap();
     }
@@ -31,7 +34,6 @@ public class MapGenerator {
             SmoothShapeMap();
         }
 
-        CalCulateStartingPosition();
     }
 
     void GenerateMapItemsMap(){
@@ -65,7 +67,7 @@ public class MapGenerator {
         for(int x = 0; x < gameInstance.width; x++){
             for(int y = 0; y < gameInstance.height; y++){
                 if(shapeMap[x, y] == 0 && !isWaterNeighbour(x, y)){
-                    int r = random.Next(0,100);
+                    /*int r = random.Next(0,100);
                     int solid = 10;
                     int tree = 40;
                     int water = 30;
@@ -76,9 +78,9 @@ public class MapGenerator {
                     if(r < solid) shapeMap[x, y] = 7;
                     else if(r > solid && r < solid + tree) shapeMap[x, y] = 4; 
                     else if(r > solid + tree && r < solid + tree + water) shapeMap[x, y] = 6; 
-                    else if(r > solid + tree + water && r < solid + tree + water + rock) shapeMap[x, y] = 5; 
+                    else if(r > solid + tree + water && r < solid + tree + water + rock) shapeMap[x, y] = 5; */
 
-                    //shapeMap[x, y] = random.Next(4, 8);
+                    shapeMap[x, y] = random.Next(4, 8);
                 }
             }   
         }
@@ -136,6 +138,17 @@ public class MapGenerator {
         int y = random.Next(0, startY);
         Debug.Log("X: " + x);
         Debug.Log("Y: " + y);
+
+        for(int xx = 0; xx < gameInstance.width; xx++){
+            for(int yy = 0; yy < gameInstance.height; yy++){
+                if(shapeMap[xx, yy] == 0){
+                    Vector3 pos = new Vector3(-gameInstance.width/2 + xx, -gameInstance.height/2 + yy, 0);
+                    player = Game.Instantiate(gameInstance.player, pos, game.transform.rotation) as GameObject;
+                    player.name = "Player";
+                    return;
+                }
+            }
+        }
         /*do {
             int x = random.Next(0, (int)(width * startPercent));
             int y = random.Next(0, (int)(height * startPercent));

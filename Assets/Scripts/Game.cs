@@ -9,8 +9,10 @@ public class Game : MonoBehaviour {
     public string seed;
     public bool useRandomSeed;
     public int borderWidth = 10;
+
     public GameObject tile;
     public GameObject mapItem;
+    public GameObject player;
 
     MapGenerator mapGenerator;
 

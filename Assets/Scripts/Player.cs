@@ -15,9 +15,9 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        currentTile = new Vector3(-7, 0, -1);
+        currentTile = transform.position;
         renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        transform.position = currentTile;
+        //transform.position = currentTile;
 	}
 	
 	// Update is called once per frame
