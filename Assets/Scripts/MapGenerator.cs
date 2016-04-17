@@ -21,8 +21,7 @@ public class MapGenerator {
 
         GenerateShapeMap();
         GenerateMapItemsMap();
-        CalCulateStartPosition();
-        CalCulateFinishPosition();
+		CalculateInitialPositions();
 
         PresentMap();
     }
@@ -127,29 +126,66 @@ public class MapGenerator {
         return wallCount;
     }
 
-    void CalCulateStartPosition(){
-        for(int xx = 0; xx < gameInstance.width; xx++){
-            for(int yy = 0; yy < gameInstance.height; yy++){
-                if(shapeMap[xx, yy] == 0){
-                    Vector3 pos = new Vector3(-gameInstance.width/2 + xx, -gameInstance.height/2 + yy, 0);
-                    player = Game.Instantiate(gameInstance.player, pos, game.transform.rotation) as GameObject;
-                    player.name = "Player";
-                    return;
-                }
-            }
-        }
-    }
+	void CalculateInitialPositions() {
+		System.Random rnd = new System.Random();
+		bool asc = rnd.Next(0,2) == 0;
+		CalculateStartPosition(asc);
+		CalculateFinishPosition(asc);
+	}
 
-    void CalCulateFinishPosition(){
-        for(int xx = gameInstance.width-1; xx > 0; xx--){
-            for(int yy = 0; yy < gameInstance.height; yy++){
-                if(shapeMap[xx, yy] == 0){
-                    shapeMap[xx, yy] = 8;
-                    return;
-                }
-            }
-        }
-    }
+	void CalculateStartPosition(bool asc) {
+		double prop = (double)gameInstance.height/ (double)gameInstance.width;
+		double x = 0.0;
+		double y = 0.0;
+		int yf = 0;
+		while (x < gameInstance.width && y < gameInstance.height) {
+			if (asc) {
+				if (shapeMap [(int)x, (int)y] == 0) {
+					Vector3 pos = new Vector3 (-gameInstance.width / 2 + (int)x, -gameInstance.height / 2 + (int)y, 0);
+					player = Game.Instantiate (gameInstance.player, pos, game.transform.rotation) as GameObject;
+					player.name = "Player";
+					return;
+				}
+			} else {
+				yf = gameInstance.height - (int)y -1;
+				if (shapeMap [(int)x, yf] == 0) {
+					Vector3 pos = new Vector3 (-gameInstance.width / 2 + (int)x, -gameInstance.height / 2 + yf, 0);
+					player = Game.Instantiate (gameInstance.player, pos, game.transform.rotation) as GameObject;
+					player.name = "Player";
+					return;
+				}
+			}
+			x += 1;
+			y += prop;
+		}
+		return;
+	}
+
+	void CalculateFinishPosition(bool asc) {
+
+		double prop = (double)gameInstance.height/(double)gameInstance.width;
+		double x = gameInstance.width-1;
+		double y = gameInstance.height-1;
+		int yf = 0;
+		while (x > 0 && y > 0) {
+			if (asc) {
+				if (shapeMap [gameInstance.width - (int)x, gameInstance.height - (int)y] == 0) {
+					shapeMap [(int)x, (int)y] = 8;
+					return;
+				}
+			} else {
+				yf = gameInstance.height - (int)y;
+				Debug.Log ((int)x + " " + yf);
+				if (shapeMap [gameInstance.width - (int)x, gameInstance.height - yf] == 0) {
+					shapeMap [(int)x, yf] = 8;
+					return;
+				}
+			}
+			x -= 1;
+			y -= prop;
+		}
+		return;
+	}
 
     Tile CreateTileAtPosition(int x, int y){
         Vector3 pos = new Vector3(-gameInstance.width/2 + x, -gameInstance.height/2 + y, 0);
