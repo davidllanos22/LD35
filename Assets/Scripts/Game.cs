@@ -16,7 +16,7 @@ public class Game : MonoBehaviour {
 
     MapGenerator mapGenerator;
 
-    private bool timerStarted = false;
+    public bool timerStarted = false;
 
     private int waveSeconds = 30;
     private int shapeshiftSeconds = 60;
@@ -54,7 +54,7 @@ public class Game : MonoBehaviour {
 
     }
 
-    void StartTimer(){
+    public void StartTimer(){
         startSeconds = (int)Time.time;
         currentSeconds = 0;
         nextWaveSeconds = currentSeconds + waveSeconds;

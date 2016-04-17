@@ -15,6 +15,8 @@ public class Player : MonoBehaviour {
 
     private Vector3 cube;
 
+    private Game game;
+
     public enum TOOL {
         NONE,
         AXE,
@@ -25,6 +27,7 @@ public class Player : MonoBehaviour {
     private TOOL currentTool = TOOL.NONE;
 
 	void Start () {
+        game = GameObject.Find("Game").GetComponent<Game>();
         currentTile = transform.position;
         renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
 	}
@@ -47,6 +50,7 @@ public class Player : MonoBehaviour {
             if(tileClicked != null){
                 MapItem mapItem = tileClicked.GetComponent<MapItem>();
                 if(mapItem!=null){
+                    if(!game.timerStarted) game.StartTimer();
                     //CreateParticles(mapItem.transform.position);
                     mapItem.Hurt(currentTool);
                 }
