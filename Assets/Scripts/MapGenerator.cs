@@ -4,8 +4,7 @@ using System;
 
 public class MapGenerator {
 
-    private int [,] shapeMap;
-    private int [,] mapItemsMap;
+    public int [,] shapeMap;
 
     private GameObject mapObject;
 
@@ -20,8 +19,8 @@ public class MapGenerator {
         if(player != null) GameObject.Destroy(player);
 
         GenerateShapeMap();
-        GenerateMapItemsMap();
-		CalculateInitialPositions();
+
+        CalculateInitialPositions();
 
         PresentMap();
     }
@@ -34,13 +33,9 @@ public class MapGenerator {
             SmoothShapeMap();
         }
 
-    }
-
-    void GenerateMapItemsMap(){
-        mapItemsMap = new int[gameInstance.width, gameInstance.height];
         RandomFillmapItemsMap();
     }
-
+        
     void RandomFillShapeMap(){
         if(gameInstance.useRandomSeed){
             gameInstance.seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
@@ -153,7 +148,7 @@ public class MapGenerator {
         }
         return wallCount;
     }
-
+        
 	void CalculateInitialPositions() {
 		System.Random rnd = new System.Random();
 		bool asc = rnd.Next(0,2) == 0;
@@ -213,6 +208,7 @@ public class MapGenerator {
 		}
 		return;
 	}
+
 
     Tile CreateTileAtPosition(int x, int y){
         Vector3 pos = new Vector3(-gameInstance.width/2 + x, -gameInstance.height/2 + y, 0);
