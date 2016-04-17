@@ -66,19 +66,42 @@ public class MapGenerator {
         System.Random random = new System.Random(gameInstance.seed.GetHashCode());
         for(int x = 0; x < gameInstance.width; x++){
             for(int y = 0; y < gameInstance.height; y++){
-                if(shapeMap[x, y] == 0 && !isWaterNeighbour(x, y)){
-                    int r = random.Next(0,100);
-                    int solid = 10;
-                    int tree = 40;
-                    int water = 10;
-                    int rock = 40;
+                if(shapeMap[x, y] == 0 && !isLeftBeachBitch(x, y)){
 
-                    if(r < solid) shapeMap[x, y] = 7;
-                    else if(r > solid && r < solid + tree) shapeMap[x, y] = 4; 
-                    else if(r > solid + tree && r < solid + tree + water) shapeMap[x, y] = 6; 
-                    else if(r > solid + tree + water && r < solid + tree + water + rock) shapeMap[x, y] = 5;
+					int rand = random.Next(0, 101);
+					Debug.Log (rand);
 
-                    //shapeMap[x, y] = random.Next(4, 8);
+					if (x < gameInstance.width / 3) {
+						if (rand <= 15) {
+							shapeMap[x, y] = 7;
+						} else if (rand <= 70) {
+							shapeMap[x, y] = 4;
+						} else if (rand <= 80) {
+							shapeMap[x, y] = 6;
+						} else { // rand <= 10
+							shapeMap[x, y] = 5;
+						}
+					} else if ( x < (gameInstance.width / 3) * 2) {
+						if (rand <= 10) {
+							shapeMap[x, y] = 7;
+						} else if (rand <= 40) {
+							shapeMap[x, y] = 4;
+						} else if (rand <= 55) {
+							shapeMap[x, y] = 6;
+						} else { // rand <= 10
+							shapeMap[x, y] = 5;
+						}
+					} else {
+						if (rand <= 5) {
+							shapeMap[x, y] = 7;
+						} else if (rand <= 15) {
+							shapeMap[x, y] = 4;
+						} else if (rand <= 35) {
+							shapeMap[x, y] = 6;
+						} else { // rand <= 10
+							shapeMap[x, y] = 5;
+						}
+					}
                 }
             }   
         }
@@ -96,6 +119,11 @@ public class MapGenerator {
         }
         return false;
     }
+
+	bool isLeftBeachBitch(int tX, int tY){
+		return shapeMap [Math.Max(tX - 1, 0), tY] == 1;
+	}
+
 
     void SmoothShapeMap(){
         for(int x = 0; x < gameInstance.width; x++){
@@ -175,7 +203,6 @@ public class MapGenerator {
 				}
 			} else {
 				yf = gameInstance.height - (int)y;
-				Debug.Log ((int)x + " " + yf);
 				if (shapeMap [gameInstance.width - (int)x, gameInstance.height - yf] == 0) {
 					shapeMap [(int)x, yf] = 8;
 					return;
