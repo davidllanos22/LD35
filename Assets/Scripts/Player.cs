@@ -6,6 +6,8 @@ public class Player : MonoBehaviour {
     private Vector3 currentTile;
     private SpriteRenderer renderer;
 
+    public GameObject particles;
+
     private bool moving = false;
 
     private float lerpTime = 1f;
@@ -22,14 +24,11 @@ public class Player : MonoBehaviour {
 
     private TOOL currentTool = TOOL.NONE;
 
-	// Use this for initialization
 	void Start () {
         currentTile = transform.position;
         renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        //transform.position = currentTile;
 	}
 	
-	// Update is called once per frame
 	void FixedUpdate () {
         currentLerpTime += 0.08f;
         if(currentLerpTime > lerpTime){
@@ -48,6 +47,7 @@ public class Player : MonoBehaviour {
             if(tileClicked != null){
                 MapItem mapItem = tileClicked.GetComponent<MapItem>();
                 if(mapItem!=null){
+                    //CreateParticles(mapItem.transform.position);
                     mapItem.Hurt(currentTool);
                 }
             }
@@ -60,6 +60,13 @@ public class Player : MonoBehaviour {
         float axisX = Input.GetAxisRaw("Horizontal");
         float axisY = Input.GetAxisRaw("Vertical");
         Move((int)Mathf.Floor(axisX), (int)Mathf.Floor(axisY));
+    }
+
+    private void CreateParticles(Vector3 position){
+        Vector3 pos = new Vector3(position.x, position.y, -15);
+        GameObject instance = Instantiate(particles, position, transform.rotation) as GameObject;
+        Particles p = instance.GetComponent<Particles>();
+        p.Init(Color.red, Particles.TYPE.SOFT);
     }
 
     private void SetPosition(int x, int y){
@@ -109,7 +116,6 @@ public class Player : MonoBehaviour {
     private GameObject GetObjectClicked(){
         Vector2 attack = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float distance = Vector2.Distance(transform.position, attack);
-        Debug.Log(distance);
         if(distance <= 1.5f){
             RaycastHit2D hit = Physics2D.Raycast(attack, Vector2.zero);
             return hit.collider != null ? hit.collider.gameObject : null;

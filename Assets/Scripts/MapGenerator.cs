@@ -74,8 +74,6 @@ public class MapGenerator {
                     int water = 10;
                     int rock = 40;
 
-                    Debug.Log(r);
-
                     if(r < solid) shapeMap[x, y] = 7;
                     else if(r > solid && r < solid + tree) shapeMap[x, y] = 4; 
                     else if(r > solid + tree && r < solid + tree + water) shapeMap[x, y] = 6; 
