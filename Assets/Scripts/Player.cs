@@ -45,9 +45,11 @@ public class Player : MonoBehaviour {
     void Update(){
         if(Input.GetMouseButtonDown(0)){
             GameObject tileClicked = GetObjectClicked();
-            MapItem mapItem = tileClicked.GetComponent<MapItem>();
-            if(mapItem!=null){
-                mapItem.Hurt(currentTool);
+            if(tileClicked != null){
+                MapItem mapItem = tileClicked.GetComponent<MapItem>();
+                if(mapItem!=null){
+                    mapItem.Hurt(currentTool);
+                }
             }
         }
 
@@ -105,8 +107,14 @@ public class Player : MonoBehaviour {
     }
 
     private GameObject GetObjectClicked(){
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        return hit.collider != null ? hit.collider.gameObject : null;
+        Vector2 attack = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        float distance = Vector2.Distance(transform.position, attack);
+        Debug.Log(distance);
+        if(distance <= 1.5f){
+            RaycastHit2D hit = Physics2D.Raycast(attack, Vector2.zero);
+            return hit.collider != null ? hit.collider.gameObject : null;
+        }
+        return null;
     }
 
     private GameObject GetObjectAtPosition(float x, float y){
