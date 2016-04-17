@@ -10,7 +10,7 @@ public class MapGenerator {
 
     private GameObject game;
     private Game gameInstance;
-    private GameObject player;
+    public GameObject player;
 
     public void NewMap(GameObject game){
         this.game = game;
@@ -150,7 +150,7 @@ public class MapGenerator {
         
 	void CalculateInitialPositions() {
 		System.Random rnd = new System.Random();
-		bool asc = rnd.Next(0,2) == 0;
+		bool asc = rnd.Next(0, 2) == 0;
 		CalculateStartPosition(asc);
 		CalculateFinishPosition(asc);
 	}
@@ -162,7 +162,6 @@ public class MapGenerator {
 		int yf = 0;
 		while (x < gameInstance.width && y < gameInstance.height) {
 			if (asc) {
-                Debug.Log(shapeMap [(int)x, (int)y]);
 				if (shapeMap [(int)x, (int)y] == 0) {
 					Vector3 pos = new Vector3 (-gameInstance.width / 2 + (int)x, -gameInstance.height / 2 + (int)y, 0);
 					player = Game.Instantiate (gameInstance.player, pos, game.transform.rotation) as GameObject;
@@ -170,7 +169,6 @@ public class MapGenerator {
 					return;
 				}
 			} else {
-                Debug.Log(shapeMap [(int)x, (int)y]);
 				yf = gameInstance.height - (int)y -1;
 				if (shapeMap [(int)x, yf] == 0) {
 					Vector3 pos = new Vector3 (-gameInstance.width / 2 + (int)x, -gameInstance.height / 2 + yf, 0);
@@ -182,7 +180,6 @@ public class MapGenerator {
 			x += 1;
 			y += prop;
 		}
-		return;
 	}
 
 	void CalculateFinishPosition(bool asc) {
@@ -207,7 +204,6 @@ public class MapGenerator {
 			x -= 1;
 			y -= prop;
 		}
-		return;
 	}
 
 
@@ -236,14 +232,6 @@ public class MapGenerator {
                     int value = shapeMap[x, y]; 
                     if(value == 0) tileInstance.Init(Tile.TYPE.SAND);
                     if(value == 1) tileInstance.Init(Tile.TYPE.WATER);
-                    if(value == 2){
-                        //TODO: set player start position
-                    }
-
-                    if(value == 3){
-                        //TODO: set player finish position
-                    }
-
                     if(value == 4){
                         MapItem mapItemInstance = CreateMapItemAtPosition(x, y);
                         tileInstance.Init(Tile.TYPE.SAND);

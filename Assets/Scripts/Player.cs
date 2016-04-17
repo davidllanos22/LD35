@@ -45,25 +45,27 @@ public class Player : MonoBehaviour {
 	}
 
     void Update(){
-        if(Input.GetMouseButtonDown(0)){
-            GameObject tileClicked = GetObjectClicked();
-            if(tileClicked != null){
-                MapItem mapItem = tileClicked.GetComponent<MapItem>();
-                if(mapItem!=null){
-                    if(!game.timerStarted) game.StartTimer();
-                    //CreateParticles(mapItem.transform.position);
-                    mapItem.Hurt(currentTool);
+        if(!Game.isPaused()){
+            if(Input.GetMouseButtonDown(0)){
+                GameObject tileClicked = GetObjectClicked();
+                if(tileClicked != null){
+                    MapItem mapItem = tileClicked.GetComponent<MapItem>();
+                    if(mapItem!=null){
+                        if(!game.timerStarted) game.StartTimer();
+                        //CreateParticles(mapItem.transform.position);
+                        mapItem.Hurt(currentTool);
+                    }
                 }
             }
+
+            if(Input.GetKeyDown(KeyCode.Alpha1)) setCurrentTool(TOOL.AXE);
+            if(Input.GetKeyDown(KeyCode.Alpha2)) setCurrentTool(TOOL.PICKAXE);
+            if(Input.GetKeyDown(KeyCode.Alpha3)) setCurrentTool(TOOL.WATER_PUMP);
+        
+            float axisX = Input.GetAxisRaw("Horizontal");
+            float axisY = Input.GetAxisRaw("Vertical");
+            Move((int)Mathf.Floor(axisX), (int)Mathf.Floor(axisY));
         }
-
-        if(Input.GetKeyDown(KeyCode.Alpha1)) setCurrentTool(TOOL.AXE);
-        if(Input.GetKeyDown(KeyCode.Alpha2)) setCurrentTool(TOOL.PICKAXE);
-        if(Input.GetKeyDown(KeyCode.Alpha3)) setCurrentTool(TOOL.WATER_PUMP);
-
-        float axisX = Input.GetAxisRaw("Horizontal");
-        float axisY = Input.GetAxisRaw("Vertical");
-        Move((int)Mathf.Floor(axisX), (int)Mathf.Floor(axisY));
     }
 
     private void CreateParticles(Vector3 position){
@@ -106,6 +108,16 @@ public class Player : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public bool IsInmune(){
+        GameObject obj = GetObjectAtPosition(transform.position.x - 1, transform.position.y);
+        MapItem item = obj.GetComponent<MapItem>();
+        if(item != null){
+            MapItem.TYPE type = item.GetType();
+            return type == MapItem.TYPE.SOLID;
+        }
+        return false; 
     }
 
     public TOOL getCurrentTool(){
