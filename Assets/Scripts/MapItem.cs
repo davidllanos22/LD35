@@ -23,11 +23,19 @@ public class MapItem : MonoBehaviour {
 
     private TYPE type;
 
+    private bool flying = false;
+    private float flyingMaxTime = 1f;
+    private float currentFlyingTime = 0;
+
     private SpriteRenderer renderer;
+    private Rigidbody2D body;
+
+    private Transform lastTransform;
 
     public void Init(TYPE type){
         this.type = type;
         renderer = GetComponent<SpriteRenderer>(); 
+        body = GetComponent<Rigidbody2D>();
 
         switch(type){
             case TYPE.TREE:
@@ -73,6 +81,18 @@ public class MapItem : MonoBehaviour {
         }
     }
 
+    public void StartFlying(bool shouldFly){
+        if(true){
+            lastTransform = transform;
+            flying = true;
+            body.AddForceAtPosition(new Vector2(8, 8), transform.position);
+            body.AddTorque(0.5f);
+        }else{
+            
+        }
+
+    }
+
     private bool isValidTool(Player.TOOL tool){
         return (tool == Player.TOOL.AXE && type == TYPE.TREE) || (tool == Player.TOOL.PICKAXE && type == TYPE.ROCK) || (tool == Player.TOOL.WATER_PUMP && type == TYPE.WATER);
     }
@@ -81,8 +101,18 @@ public class MapItem : MonoBehaviour {
         Destroy(transform.gameObject);
     }
 
-    // Update is called once per frame
     void Update () {
+        if(flying){
+            if(currentFlyingTime >= flyingMaxTime){
+                Destroy(body);
+                transform.position = lastTransform.position;
+                body = gameObject.AddComponent<Rigidbody2D>();
 
+                flying = false;
+                currentFlyingTime = 0;
+            }else{
+                currentFlyingTime += Time.deltaTime;
+            }
+        }
     }
 }

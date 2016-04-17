@@ -4,8 +4,7 @@ using System;
 
 public class MapGenerator {
 
-    private int [,] shapeMap;
-    private int [,] mapItemsMap;
+    public int [,] shapeMap;
 
     private GameObject mapObject;
 
@@ -20,9 +19,7 @@ public class MapGenerator {
         if(player != null) GameObject.Destroy(player);
 
         GenerateShapeMap();
-        GenerateMapItemsMap();
-        CalCulateStartPosition();
-        CalCulateFinishPosition();
+        CalculateInitialPositions();
 
         PresentMap();
     }
@@ -35,13 +32,9 @@ public class MapGenerator {
             SmoothShapeMap();
         }
 
-    }
-
-    void GenerateMapItemsMap(){
-        mapItemsMap = new int[gameInstance.width, gameInstance.height];
         RandomFillmapItemsMap();
     }
-
+        
     void RandomFillShapeMap(){
         if(gameInstance.useRandomSeed){
             gameInstance.seed = (Time.time + UnityEngine.Random.Range(0, 100)).ToString();
@@ -127,7 +120,7 @@ public class MapGenerator {
         return wallCount;
     }
 
-    void CalCulateStartPosition(){
+    /*void CalculateStartPosition(){
         for(int xx = 0; xx < gameInstance.width; xx++){
             for(int yy = 0; yy < gameInstance.height; yy++){
                 if(shapeMap[xx, yy] == 0){
@@ -140,7 +133,7 @@ public class MapGenerator {
         }
     }
 
-    void CalCulateFinishPosition(){
+    void CalculateFinishPosition(){
         for(int xx = gameInstance.width-1; xx > 0; xx--){
             for(int yy = 0; yy < gameInstance.height; yy++){
                 if(shapeMap[xx, yy] == 0){
@@ -149,6 +142,45 @@ public class MapGenerator {
                 }
             }
         }
+    }*/
+
+    void CalculateInitialPositions() {
+        System.Random rnd = new System.Random();
+        bool asc = rnd.Next(0,2) == 0;
+        CalculateStartPosition(asc);
+        CalculateFinishPosition(asc);
+    }
+    void CalculateStartPosition(bool asc) {
+        double prop = gameInstance.height/gameInstance.width;
+        double x = 0.0;
+        double y = 0.0;
+        while (x < gameInstance.width && y < gameInstance.height) {
+            if( shapeMap[(int)x, (int)y] == 0 ) {
+                Vector3 pos = new Vector3(-gameInstance.width/2 + (int)x, -gameInstance.height/2 + (int)y, 0);
+                player = Game.Instantiate(gameInstance.player, pos, game.transform.rotation) as GameObject;
+                player.name = "Player";
+                return;
+            }
+            x += 1;
+            y += prop;
+        }
+        return;
+    }
+
+    void CalculateFinishPosition(bool asc) {
+
+        double prop = gameInstance.height/gameInstance.width;
+        double x = gameInstance.width-1;
+        double y = gameInstance.height-1;
+        while (x > 0 && y > 0) {
+            if( shapeMap[gameInstance.width-(int)x, gameInstance.height-(int)y] == 0 ) {
+                shapeMap[(int)x, (int)y] = 8;
+                return;
+            }
+            x -= 1;
+            y -= prop;
+        }
+        return;
     }
 
     Tile CreateTileAtPosition(int x, int y){

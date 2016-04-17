@@ -13,6 +13,7 @@ public class Game : MonoBehaviour {
     public GameObject tile;
     public GameObject mapItem;
     public GameObject player;
+    public GameObject enemy;
 
     MapGenerator mapGenerator;
 
