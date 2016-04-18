@@ -61,20 +61,22 @@ public class MapGenerator {
         System.Random random = new System.Random(gameInstance.seed.GetHashCode());
         for(int x = 0; x < gameInstance.width; x++){
             for(int y = 0; y < gameInstance.height; y++){
-                if(shapeMap[x, y] == 0 && !isLeftBeachBitch(x, y)){
+                if(shapeMap[x, y] == 0){
 
 					int rand = random.Next(0, 101);
 
 					if (x < gameInstance.width / 3) {
-						if (rand <= 15) {
-							shapeMap[x, y] = 7;
-						} else if (rand <= 70) {
-							shapeMap[x, y] = 4;
-						} else if (rand <= 80) {
-							shapeMap[x, y] = 6;
-						} else { // rand <= 10
-							shapeMap[x, y] = 5;
-						}
+                        if(!isWaterTile(x - 1, y)){
+    						if (rand <= 15) {
+    							shapeMap[x, y] = 7;
+    						} else if (rand <= 70) {
+    							shapeMap[x, y] = 4;
+    						} else if (rand <= 80) {
+    							shapeMap[x, y] = 6;
+    						} else { // rand <= 10
+    							shapeMap[x, y] = 5;
+    						}
+                        }
 					} else if ( x < (gameInstance.width / 3) * 2) {
 						if (rand <= 10) {
 							shapeMap[x, y] = 7;
@@ -114,8 +116,8 @@ public class MapGenerator {
         return false;
     }
 
-	bool isLeftBeachBitch(int tX, int tY){
-		return shapeMap [Math.Max(tX - 1, 0), tY] != 0;
+	bool isWaterTile(int tX, int tY){
+		return shapeMap [Math.Max(tX, 0), tY] != 0;
 	}
 
 
