@@ -64,7 +64,12 @@ public class Player : MonoBehaviour {
         
             float axisX = Input.GetAxisRaw("Horizontal");
             float axisY = Input.GetAxisRaw("Vertical");
-            Move((int)Mathf.Floor(axisX), (int)Mathf.Floor(axisY));
+
+            Debug.Log(axisX + "   " + axisY);
+            if(Mathf.Abs(axisX) > 0)
+                Move((int)Mathf.Floor(axisX), 0);
+            else if(Mathf.Abs(axisY) > 0)
+                Move(0, (int)Mathf.Floor(axisY));
         }
     }
 

@@ -12,7 +12,7 @@ public class IntroBehavior : MonoBehaviour {
 	}
 	
 	void Update () {
-        if(Input.anyKeyDown || Input.GetMouseButtonDown(0)){
+        if(Input.GetMouseButtonDown(0)){
             counter++;
             if(counter == 1){
                 image2.SetActive(true);
